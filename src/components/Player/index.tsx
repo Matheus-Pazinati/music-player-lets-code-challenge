@@ -8,12 +8,15 @@ import { songs } from '../../../db.json'
 export function Player() {
   const [activeSongId, setActiveSongId] = useState(1)
 
+  const isFirstSong = activeSongId === 1
+  const isLastSong = activeSongId === 3
+
   const activeSong = songs.find((song) => song.id === activeSongId)
   const progress = 50
   return (
     <main className='flex justify-center items-start sm:items-center h-[100vh]'>
       <section
-        className='bg-[#2A2141] mx-4 my-4 rounded-md max-w-xs sm:w-[500px] sm:max-w-none'
+        className='bg-[#262626] mx-4 my-4 rounded-md max-w-xs sm:w-[500px] sm:max-w-none'
       >
         <div
           className='px-9 sm:px-7 py-14 sm:py-7' >
@@ -26,13 +29,13 @@ export function Player() {
           </div>
           <div className='w-full'>
             <div className='flex justify-between sm:justify-around items-center w-full my-7'>
-              <button>
+              <button disabled={isFirstSong} className="disabled:opacity-50 disabled:cursor-not-allowed">
                 <Rewind size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
-              <button>
+              <button disabled={isLastSong}>
                 <Play size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
-              <button>
+              <button disabled={isLastSong} className="disabled:opacity-50 disabled:cursor-not-allowed">
                 <FastForward size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
             </div>
