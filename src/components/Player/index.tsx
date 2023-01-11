@@ -1,8 +1,14 @@
 import * as Progress from '@radix-ui/react-progress';
-
 import { Play, FastForward, Rewind } from 'phosphor-react'
 
+import { useState } from 'react';
+
+import { songs } from '../../../db.json'
+
 export function Player() {
+  const [activeSongId, setActiveSongId] = useState(1)
+
+  const activeSong = songs.find((song) => song.id === activeSongId)
   const progress = 50
   return (
     <main className='flex justify-center items-start sm:items-center h-[100vh]'>
@@ -12,10 +18,10 @@ export function Player() {
         <div
           className='px-9 sm:px-7 py-14 sm:py-7' >
           <div className='flex flex-col sm:flex-row gap-7 sm:items-center sm:gap-9 '>
-            <img src="https://phx02pap001files.storage.live.com/y4m14tKYTSDdKN4DQnuXHjsPTs5BFv1LgUFGJtP5OVRDqd8hwDlWPvYJ5uQEGEg9b_ZbLy0GPB1OY-4ulU8SxP9Iyo0ke4nwEZNdxJQEcepAbGr6PbqKt_0is2nzdLVwbBsV7u9v6Z2CmEWauj_9CGAC_1TiNJEoKbpnwOhyXAW8ZP6KW3RgJq-ZyFt50Zt4ZBO?width=640&height=640&cropmode=none" alt="" className='rounded-md sm:w-[150px] sm:h-[150px]' />
+            <img src={activeSong?.image} alt="" className='rounded-md sm:w-[150px] sm:h-[150px]' />
             <div>
-              <h2 className='text-[#E1E1E6] font-bold text-2xl'>Janking Roe</h2>
-              <p className='text-[#E1E1E6] text-lg'>Florian</p>
+              <h2 className='text-[#E1E1E6] font-bold text-2xl'>{activeSong?.name}</h2>
+              <p className='text-[#E1E1E6] text-lg'>{activeSong?.artist}</p>
             </div>
           </div>
           <div className='w-full'>
