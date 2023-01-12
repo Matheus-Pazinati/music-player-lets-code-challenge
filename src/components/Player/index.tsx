@@ -1,9 +1,11 @@
 import * as Progress from '@radix-ui/react-progress';
 import { Play, FastForward, Rewind, Pause } from 'phosphor-react'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { songs } from '../../../db.json'
+
+type ChangeMusic = 'next' | 'preview'
 
 export function Player() {
 
@@ -14,9 +16,21 @@ export function Player() {
   const isLastSong = activeSongId === 3
 
   const activeSong = songs.find((song) => song.id === activeSongId)
+
+  const [song, setSong] = useState(new Audio(activeSong?.song))
+
+  useEffect(() => {
+    isSongPlaying ? song.play() : song.pause()
+  }, [isSongPlaying, song])
+
+  useEffect(() => {
+    setSong(new Audio(songs.find((song) => song.id === activeSongId)?.song))
+    song.load()
+  }, [activeSongId])
+
   const progress = 50
 
-  function handleChangePlayAndStop() {
+  function handlePlayAndStopSong() {
     setIsSongPlaying(state => !state)
   }
 
@@ -43,19 +57,24 @@ export function Player() {
               >
                 <Rewind size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
-                <button onClick={handleChangePlayAndStop}>
-                  {isSongPlaying ? (
-                    <Pause size={28} weight={'fill'} color={'#E1E1E6'} />
-                  ) : 
+              <button onClick={handlePlayAndStopSong}>
+                {isSongPlaying ? (
+                  <Pause size={28} weight={'fill'} color={'#E1E1E6'} />
+                )
+                  :
                   (
                     <Play size={28} weight={'fill'} color={'#E1E1E6'} />
                   )
                 }
-                </button>
+              </button>
+
               <button
                 disabled={isLastSong}
                 className="disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={() => setActiveSongId(state => state + 1)}
+                onClick={() => {
+                  setActiveSongId(state => state + 1) 
+                  setIsSongPlaying(true)
+                }}
               >
                 <FastForward size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>

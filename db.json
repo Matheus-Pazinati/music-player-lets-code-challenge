@@ -5,21 +5,21 @@
       "name": "Trees in the Breeze",
       "artist": "Sabbo",
       "image": "https://phx02pap001files.storage.live.com/y4m3VhxivNSLiDKl2lHALJ61XvONt0WWXFLN4m9ZD9BIo61nyz5sYAhVIoy0yxreolO9C8wonGCpfMp01q5ZAhxpUp8LX00SZ-7Vk_JnaNoses7sZcwWmhMuYInX0gzZlzTm6gUSOtXRZkTdu6RaSx3GPvknqEMyD1tzyPAQJcgudDWiNlwjYKMAwEu40lBlS3H?width=640&height=640&cropmode=none",
-      "song": "../../assets/sounds/Sabbo - Trees in the Breeze.mp3"
+      "song": "./sounds/Sabbo-Trees-in-the-Breeze.mp3"
     },
     {
       "id": 2,
       "name": "Janking Roe",
       "artist": "Florian",
       "image": "https://phx02pap001files.storage.live.com/y4m14tKYTSDdKN4DQnuXHjsPTs5BFv1LgUFGJtP5OVRDqd8hwDlWPvYJ5uQEGEg9b_ZbLy0GPB1OY-4ulU8SxP9Iyo0ke4nwEZNdxJQEcepAbGr6PbqKt_0is2nzdLVwbBsV7u9v6Z2CmEWauj_9CGAC_1TiNJEoKbpnwOhyXAW8ZP6KW3RgJq-ZyFt50Zt4ZBO?width=640&height=640&cropmode=none",
-      "song": "../../assets/sounds/Florian - Janking Roe.mp3"
+      "song": "./sounds/Florian-Janking-Roe.mp3"
     },
     {
       "id": 3,
       "name": "Another Toy",
       "artist": "Alex Keren",
       "image": "https://phx02pap001files.storage.live.com/y4mhhqVHYBoETVvoq_LMjV4oN94HU2nNuPaqW8GHSZpdK6ebY8YSwMMxca0luMLAXnlMr5ozKfqW3NyoMiqJpMRTVyZf8Atkyg7M1tZCcdICUGypAIgwX7VDGvKEz2uVca1apNdgmFxyqU5i7Xtlv-QsMOGlNhVcqpHJxYCqINWP5vZmbr2_Jj6gZkckViXSzXT?width=500&height=500&cropmode=none",
-      "song": "../../assets/sounds/Alex Keren - Another Toy.mp3"
+      "song": "./sounds/Alex-Keren-Another-Toy.mp3"
     }
   ]
 }
