@@ -1,20 +1,25 @@
 import * as Progress from '@radix-ui/react-progress';
-import { Play, FastForward, Rewind } from 'phosphor-react'
+import { Play, FastForward, Rewind, Pause } from 'phosphor-react'
 
 import { useState } from 'react';
 
 import { songs } from '../../../db.json'
 
 export function Player() {
+
   const [activeSongId, setActiveSongId] = useState(1)
+  const [isSongPlaying, setIsSongPlaying] = useState(false)
 
   const isFirstSong = activeSongId === 1
   const isLastSong = activeSongId === 3
 
-  console.log(activeSongId)
-
   const activeSong = songs.find((song) => song.id === activeSongId)
   const progress = 50
+
+  function handleChangePlayAndStop() {
+    setIsSongPlaying(state => !state)
+  }
+
   return (
     <main className='flex justify-center items-start sm:items-center h-[100vh]'>
       <section
@@ -31,20 +36,26 @@ export function Player() {
           </div>
           <div className='w-full'>
             <div className='flex justify-between sm:justify-around items-center w-full my-7'>
-              <button 
-              disabled={isFirstSong} 
-              className="disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={() => setActiveSongId(state => state - 1)}
+              <button
+                disabled={isFirstSong}
+                className="disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => setActiveSongId(state => state - 1)}
               >
                 <Rewind size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
-              <button disabled={isLastSong}>
-                <Play size={28} weight={'fill'} color={'#E1E1E6'} />
-              </button>
-              <button 
-              disabled={isLastSong} 
-              className="disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={() => setActiveSongId(state => state + 1)}
+                <button onClick={handleChangePlayAndStop}>
+                  {isSongPlaying ? (
+                    <Pause size={28} weight={'fill'} color={'#E1E1E6'} />
+                  ) : 
+                  (
+                    <Play size={28} weight={'fill'} color={'#E1E1E6'} />
+                  )
+                }
+                </button>
+              <button
+                disabled={isLastSong}
+                className="disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => setActiveSongId(state => state + 1)}
               >
                 <FastForward size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
