@@ -11,12 +11,14 @@ export function Player() {
   const isFirstSong = activeSongId === 1
   const isLastSong = activeSongId === 3
 
+  console.log(activeSongId)
+
   const activeSong = songs.find((song) => song.id === activeSongId)
   const progress = 50
   return (
     <main className='flex justify-center items-start sm:items-center h-[100vh]'>
       <section
-        className='bg-[#262626] mx-4 my-4 rounded-md max-w-xs sm:w-[500px] sm:max-w-none'
+        className='bg-[#172573] mx-4 my-4 rounded-md max-w-xs sm:w-[500px] sm:max-w-none'
       >
         <div
           className='px-9 sm:px-7 py-14 sm:py-7' >
@@ -29,13 +31,21 @@ export function Player() {
           </div>
           <div className='w-full'>
             <div className='flex justify-between sm:justify-around items-center w-full my-7'>
-              <button disabled={isFirstSong} className="disabled:opacity-50 disabled:cursor-not-allowed">
+              <button 
+              disabled={isFirstSong} 
+              className="disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => setActiveSongId(state => state - 1)}
+              >
                 <Rewind size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
               <button disabled={isLastSong}>
                 <Play size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
-              <button disabled={isLastSong} className="disabled:opacity-50 disabled:cursor-not-allowed">
+              <button 
+              disabled={isLastSong} 
+              className="disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => setActiveSongId(state => state + 1)}
+              >
                 <FastForward size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
             </div>
