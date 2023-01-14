@@ -5,8 +5,6 @@ import { useEffect, useState } from 'react';
 
 import { songs } from '../../../db.json'
 
-type ChangeMusic = 'next' | 'preview'
-
 export function Player() {
 
   const [activeSongId, setActiveSongId] = useState(1)
@@ -17,14 +15,14 @@ export function Player() {
 
   const activeSong = songs.find((song) => song.id === activeSongId)
 
-  const [song, setSong] = useState(new Audio(activeSong?.song))
+  const [song, setSong] = useState(new Audio(''))
 
   useEffect(() => {
     isSongPlaying ? song.play() : song.pause()
   }, [isSongPlaying, song])
 
   useEffect(() => {
-    setSong(new Audio(songs.find((song) => song.id === activeSongId)?.song))
+    setSong(new Audio(activeSong?.song))
     song.load()
   }, [activeSongId])
 
@@ -53,7 +51,10 @@ export function Player() {
               <button
                 disabled={isFirstSong}
                 className="disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={() => setActiveSongId(state => state - 1)}
+                onClick={() => {
+                  setActiveSongId(state => state - 1)
+                  setIsSongPlaying(true)
+                }}
               >
                 <Rewind size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
