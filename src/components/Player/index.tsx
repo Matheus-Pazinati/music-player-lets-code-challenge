@@ -17,6 +17,12 @@ export function Player() {
 
   const activeSong = songs.find((song) => song.id === activeSongId)
 
+  const songMinutes = Math.floor(song.duration / 60)
+  const songSeconds = Math.floor(song.duration % 60)
+
+  const songMinutesTotal = !!progressBar ? String(songMinutes).padStart(2, "0") : "00"
+  const songSecondsTotal = !!progressBar ? String(songSeconds).padStart(2, "0") : "00"
+
   useEffect(() => {
     let timer: number;
     if (isSongPlaying) {
@@ -106,7 +112,7 @@ export function Player() {
               </Progress.Root>
               <div className='flex items-center justify-between mt-2 text-sm text-[#C4C4CC]'>
                 <span>03:20</span>
-                <span>00:00</span>
+                <span>{songMinutesTotal}:{songSecondsTotal}</span>
               </div>
             </div>
           </div>
