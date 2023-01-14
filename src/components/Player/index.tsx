@@ -9,24 +9,38 @@ export function Player() {
 
   const [activeSongId, setActiveSongId] = useState(1)
   const [isSongPlaying, setIsSongPlaying] = useState(false)
+  const [song, setSong] = useState(new Audio(undefined))
+  const [progressBar, setProgressBar] = useState(0)
 
   const isFirstSong = activeSongId === 1
   const isLastSong = activeSongId === 3
 
   const activeSong = songs.find((song) => song.id === activeSongId)
 
-  const [song, setSong] = useState(new Audio(''))
-
   useEffect(() => {
-    isSongPlaying ? song.play() : song.pause()
+    let timer: number;
+    if (isSongPlaying) {
+      timer = setInterval(() => {
+        setProgressBar(state => state + 100 / song.duration)
+        if (song.paused || progressBar >= 100) {
+          clearInterval(timer)
+        }
+      }
+        , 1000)
+      song.play()
+      return
+    }
+    song.pause()
+    return () => {
+      clearInterval(timer)
+    }
   }, [isSongPlaying, song])
 
   useEffect(() => {
+    setProgressBar(0)
     setSong(new Audio(activeSong?.song))
     song.load()
   }, [activeSongId])
-
-  const progress = 50
 
   function handlePlayAndStopSong() {
     setIsSongPlaying(state => !state)
@@ -73,7 +87,7 @@ export function Player() {
                 disabled={isLastSong}
                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => {
-                  setActiveSongId(state => state + 1) 
+                  setActiveSongId(state => state + 1)
                   setIsSongPlaying(true)
                 }}
               >
@@ -87,12 +101,12 @@ export function Player() {
               >
                 <Progress.Indicator
                   className='w-full h-full bg-[#D9D9D9] rounded-full transition trasform duration-1000 ease-[cubic-bezier(0.65, 0, 0.35, 1)]'
-                  style={{ transform: `translateX(-${100 - progress}%)` }}
+                  style={{ transform: `translateX(-${100 - progressBar}%)` }}
                 />
               </Progress.Root>
               <div className='flex items-center justify-between mt-2 text-sm text-[#C4C4CC]'>
                 <span>03:20</span>
-                <span>00:12</span>
+                <span>00:00</span>
               </div>
             </div>
           </div>
