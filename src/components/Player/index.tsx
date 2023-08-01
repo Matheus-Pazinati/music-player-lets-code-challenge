@@ -3,56 +3,72 @@ import { Play, FastForward, Rewind, Pause } from 'phosphor-react'
 
 import { useEffect, useState } from 'react';
 
-import { songs } from '../../../db.json'
+import { musics } from '../../../db.json'
 
 export function Player() {
-
-  const [activeSongId, setActiveSongId] = useState(1)
-  const [isSongPlaying, setIsSongPlaying] = useState(false)
-  const [song, setSong] = useState(new Audio(undefined))
+  const [activeMusicId, setActiveMusicId] = useState(1)
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false)
+  const [music, setMusic] = useState(new Audio(undefined))
   const [progressBar, setProgressBar] = useState(0)
 
-  const isFirstSong = activeSongId === 1
-  const isLastSong = activeSongId === 3
+  const isFirstMusic = activeMusicId === 1
+  const isLastMusic = activeMusicId === 3
 
-  const activeSong = songs.find((song) => song.id === activeSongId)
+  const activeMusic = musics.find((music) => music.id === activeMusicId)
 
-  const songMinutes = Math.floor(song.duration / 60)
-  const songSeconds = Math.floor(song.duration % 60)
+  const totalMinutesOfMusic = Math.floor(music.duration / 60)
+  const totalSecondsOfMusic = Math.floor(music.duration % 60)
 
-  const songMinutesTotal = !!progressBar ? String(songMinutes).padStart(2, "0") : "00"
-  const songSecondsTotal = !!progressBar ? String(songSeconds).padStart(2, "0") : "00"
+  const totalMinutesOfMusicView = !!progressBar ? String(totalMinutesOfMusic).padStart(2, "0") : "00"
+  const totalSecondsOfMusicView= !!progressBar ? String(totalSecondsOfMusic).padStart(2, "0") : "00"
 
-  const songCurrentMinutes = Math.floor(song.currentTime / 60).toString().padStart(2, "0")
-  const songCurrentSeconds = Math.floor(song.currentTime % 60).toString().padStart(2, "0")
+  const currentMinutesOfMusicView = Math.floor(music.currentTime / 60).toString().padStart(2, "0")
+  const currentSecondsOfMusicView= Math.floor(music.currentTime % 60).toString().padStart(2, "0")
+
+  const isMusicEnded = progressBar >= 100
+  
+  const PROGRESS_BAR_MAX_VALUE = 100;
+  
+  isMusicPlaying ? music.play() : music.pause()
 
   useEffect(() => {
-    let timer: number;
-    if (isSongPlaying) {
-      timer = setInterval(() => {
-        setProgressBar(state => state + 100 / song.duration)
-        if (song.paused || progressBar >= 100) {
-          clearInterval(timer)
+    function updateMusicProgressBar() {
+      let timer: number;
+      if (isMusicPlaying) {
+        timer = setInterval(() => {
+          setProgressBar(state => state + PROGRESS_BAR_MAX_VALUE / music.duration)
+          if (music.paused || isMusicEnded) {
+            clearInterval(timer)
+          }
         }
+          , 1000)
       }
-        , 1000)
-      song.play()
-      return
+      return () => {
+        clearInterval(timer)
+      }
     }
-    song.pause()
-    return () => {
-      clearInterval(timer)
-    }
-  }, [isSongPlaying, song])
+    updateMusicProgressBar()
+  }, [isMusicPlaying, music])
 
   useEffect(() => {
-    setProgressBar(0)
-    setSong(new Audio(activeSong?.song))
-    song.load()
-  }, [activeSongId])
+    function loadNewMusic() {
+      setMusic(new Audio(activeMusic?.music))
+      music.load()
+    }
+    loadNewMusic()
+  }, [activeMusicId])
 
-  function handlePlayAndStopSong() {
-    setIsSongPlaying(state => !state)
+  function handlePlayAndStopmusic() {
+    setIsMusicPlaying(state => !state)
+  }
+
+  function changeMusic(action: 'NEXT' | 'PREV') {
+    setProgressBar(0)
+    setIsMusicPlaying(true)
+    action === "NEXT" ? 
+    setActiveMusicId(state => state + 1)
+    :
+    setActiveMusicId(state => state - 1)
   }
 
   return (
@@ -63,26 +79,25 @@ export function Player() {
         <div
           className='px-9 sm:px-7 py-14 sm:py-7' >
           <div className='flex flex-col sm:flex-row gap-7 sm:items-center sm:gap-9 '>
-            <img src={activeSong?.image} alt="" className='rounded-md sm:w-[150px] sm:h-[150px]' />
+            <img src={activeMusic?.image} alt="" className='rounded-md sm:w-[150px] sm:h-[150px]' />
             <div>
-              <h2 className='text-[#E1E1E6] font-bold text-2xl'>{activeSong?.name}</h2>
-              <p className='text-[#E1E1E6] text-lg'>{activeSong?.artist}</p>
+              <h2 className='text-[#E1E1E6] font-bold text-2xl'>{activeMusic?.name}</h2>
+              <p className='text-[#E1E1E6] text-lg'>{activeMusic?.artist}</p>
             </div>
           </div>
           <div className='w-full'>
             <div className='flex justify-between sm:justify-around items-center w-full my-7'>
               <button
-                disabled={isFirstSong}
+                disabled={isFirstMusic}
                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => {
-                  setActiveSongId(state => state - 1)
-                  setIsSongPlaying(true)
+                  changeMusic('PREV')
                 }}
               >
                 <Rewind size={28} weight={'fill'} color={'#E1E1E6'} />
               </button>
-              <button onClick={handlePlayAndStopSong}>
-                {isSongPlaying ? (
+              <button onClick={handlePlayAndStopmusic}>
+                {isMusicPlaying ? (
                   <Pause size={28} weight={'fill'} color={'#E1E1E6'} />
                 )
                   :
@@ -93,11 +108,10 @@ export function Player() {
               </button>
 
               <button
-                disabled={isLastSong}
+                disabled={isLastMusic}
                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => {
-                  setActiveSongId(state => state + 1)
-                  setIsSongPlaying(true)
+                  changeMusic('NEXT')
                 }}
               >
                 <FastForward size={28} weight={'fill'} color={'#E1E1E6'} />
@@ -114,8 +128,8 @@ export function Player() {
                 />
               </Progress.Root>
               <div className='flex items-center justify-between mt-2 text-sm text-[#C4C4CC]'>
-                <span>{songCurrentMinutes}:{songCurrentSeconds}</span>
-                <span>{songMinutesTotal}:{songSecondsTotal}</span>
+                <span>{currentMinutesOfMusicView}:{currentSecondsOfMusicView}</span>
+                <span>{totalMinutesOfMusicView}:{totalSecondsOfMusicView}</span>
               </div>
             </div>
           </div>
